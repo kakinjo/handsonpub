@@ -1,0 +1,11 @@
+appspec.yml
+
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "jpix-iiday-handson-task"
+        LoadBalancerInfo:
+          ContainerName: "apache-helloworld"
+          ContainerPort: 80  
