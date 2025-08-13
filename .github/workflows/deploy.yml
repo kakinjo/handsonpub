@@ -28,9 +28,6 @@ jobs:
           IMAGE_URI=746611055047.dkr.ecr.ap-northeast-1.amazonaws.com/h4b-ecs-helloworld:latest
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
-
-      - name: Pull image from ECR
-        run: |
           docker pull $IMAGE_URI
 
       - name: Create container and extract files
