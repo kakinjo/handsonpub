@@ -1,4 +1,4 @@
-name: Deploy to ECR
+name: Deploy to ECR and Upload to S3
 
 on:
   push:
@@ -28,3 +28,18 @@ jobs:
           IMAGE_URI=746611055047.dkr.ecr.ap-northeast-1.amazonaws.com/h4b-ecs-helloworld:latest
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
+
+      - name: Pull image from ECR
+        run: |
+          docker pull $IMAGE_URI
+
+      - name: Create container and extract files
+        run: |
+          docker create --name temp-container $IMAGE_URI
+          mkdir -p ./extracted
+          docker cp temp-container:/test.txt ./extracted/
+          docker rm temp-container
+
+      - name: Upload extracted files to S3
+        run: |
+          aws s3 cp ./extracted s3://jpix-test-lecture/ --recursive
